@@ -1,0 +1,108 @@
+2026-04-19 12:44:16 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 12:44:16 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 12:44:16 [INFO    ] __main__: Shutting down WebSocket server.
+2026-04-19 12:44:16 [ERROR   ] core.nt_client: WebSocket server crashed.
+Traceback (most recent call last):
+  File "D:\NinjaAccountManager\core\nt_client.py", line 102, in _run_loop
+    self._loop.run_until_complete(self._serve())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 718, in run_until_complete
+    raise RuntimeError('Event loop stopped before Future completed.')
+RuntimeError: Event loop stopped before Future completed.
+2026-04-19 12:44:16 [INFO    ] __main__: NinjaAccountManager stopped.
+2026-04-19 12:45:00 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 12:45:00 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 12:45:00 [INFO    ] __main__: Shutting down WebSocket server.
+2026-04-19 12:45:00 [ERROR   ] core.nt_client: WebSocket server crashed.
+Traceback (most recent call last):
+  File "D:\NinjaAccountManager\core\nt_client.py", line 102, in _run_loop
+    self._loop.run_until_complete(self._serve())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 718, in run_until_complete
+    raise RuntimeError('Event loop stopped before Future completed.')
+RuntimeError: Event loop stopped before Future completed.
+2026-04-19 12:45:00 [INFO    ] __main__: NinjaAccountManager stopped.
+2026-04-19 12:47:06 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 12:47:06 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 12:47:06 [INFO    ] __main__: Shutting down WebSocket server.
+2026-04-19 12:47:06 [ERROR   ] core.nt_client: WebSocket server crashed.
+Traceback (most recent call last):
+  File "D:\NinjaAccountManager\core\nt_client.py", line 102, in _run_loop
+    self._loop.run_until_complete(self._serve())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\base_events.py", line 718, in run_until_complete
+    raise RuntimeError('Event loop stopped before Future completed.')
+RuntimeError: Event loop stopped before Future completed.
+2026-04-19 12:47:06 [INFO    ] __main__: NinjaAccountManager stopped.
+2026-04-19 12:51:09 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 12:51:09 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 12:51:10 [INFO    ] websockets.server: server listening on 127.0.0.1:8765
+2026-04-19 12:51:10 [INFO    ] core.nt_client: WebSocket server listening on ws://127.0.0.1:8765
+2026-04-19 12:51:12 [INFO    ] websockets.server: connection open
+2026-04-19 12:51:12 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 61693)
+2026-04-19 12:52:34 [INFO    ] core.nt_client: Order submitted: Buy Market ES 06-26 x1 @ 0.00
+2026-04-19 12:52:34 [INFO    ] gui.orders: User submitted Buy Market ES 06-26 x1
+2026-04-19 12:53:30 [INFO    ] core.nt_client: Order submitted: Sell Market NQ 06-26 x1 @ 0.00
+2026-04-19 12:53:30 [INFO    ] gui.orders: User submitted Sell Market NQ 06-26 x1
+2026-04-19 12:54:18 [INFO    ] core.nt_client: NinjaTrader disconnected: ('127.0.0.1', 61693)
+2026-04-19 12:54:18 [INFO    ] websockets.server: connection open
+2026-04-19 12:54:18 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 57778)
+2026-04-19 12:55:17 [INFO    ] core.nt_client: NinjaTrader disconnected: ('127.0.0.1', 57778)
+2026-04-19 12:55:17 [INFO    ] websockets.server: connection open
+2026-04-19 12:55:17 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 56877)
+2026-04-19 12:57:19 [INFO    ] gui.charts: Subscribed to bars: NQ 06-26 (1 Minute)
+2026-04-19 12:58:12 [INFO    ] core.nt_client: NinjaTrader disconnected: ('127.0.0.1', 56877)
+2026-04-19 12:58:12 [INFO    ] websockets.server: connection open
+2026-04-19 12:58:12 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 65453)
+2026-04-19 12:58:18 [INFO    ] gui.charts: Subscribed to bars: NQ 06-26 (1 Minute)
+2026-04-19 12:59:51 [INFO    ] gui.charts: Subscribed to bars: NQ 06-26 (1 Minute)
+2026-04-19 13:02:30 [INFO    ] gui.charts: Subscribed to bars: NQ 06-26 (1 Minute)
+2026-04-19 13:03:14 [INFO    ] core.nt_client: Order submitted: Buy Market NQ 06-26 x1 @ 0.00
+2026-04-19 13:03:14 [INFO    ] gui.orders: User submitted Buy Market NQ 06-26 x1
+2026-04-19 13:03:26 [INFO    ] core.nt_client: Order submitted: Sell Market NQ 06-26 x1 @ 0.00
+2026-04-19 13:03:26 [INFO    ] gui.orders: User submitted Sell Market NQ 06-26 x1
+2026-04-19 13:03:59 [INFO    ] core.nt_client: Order submitted: Buy Market NQ 06-26 x1 @ 0.00
+2026-04-19 13:03:59 [INFO    ] gui.orders: User submitted Buy Market NQ 06-26 x1
+2026-04-19 13:17:42 [INFO    ] __main__: Shutting down WebSocket server.
+2026-04-19 13:17:42 [INFO    ] __main__: NinjaAccountManager stopped.
+2026-04-19 13:17:42 [ERROR   ] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-17' coro=<IocpProactor.accept.<locals>.accept_coro() done, defined at C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py:564> wait_for=<_OverlappedFuture pending cb=[BaseProactorEventLoop._start_serving.<locals>.loop() at C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py:840, Task.task_wakeup()]>>
+2026-04-19 13:17:42 [INFO    ] core.nt_client: NinjaTrader disconnected: ('127.0.0.1', 65453)
+2026-04-19 13:17:42 [ERROR   ] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-18' coro=<Server.conn_handler() done, defined at D:\NinjaAccountManager\.venv\Lib\site-packages\websockets\asyncio\server.py:343> wait_for=<Future cancelled>>
+2026-04-19 13:17:42 [ERROR   ] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-19' coro=<Connection.keepalive() done, defined at D:\NinjaAccountManager\.venv\Lib\site-packages\websockets\asyncio\connection.py:808> wait_for=<Future pending cb=[Task.task_wakeup()]>>
+2026-04-19 13:17:42 [ERROR   ] asyncio: Cancelling an overlapped future failed
+future: <_OverlappedFuture pending cb=[_ProactorReadPipeTransport._loop_reading()]>
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py", line 72, in _cancel_overlapped
+    self._ov.cancel()
+    ~~~~~~~~~~~~~~~^^
+OSError: [WinError 6] The handle is invalid
+2026-04-19 13:17:49 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 13:17:49 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 13:17:49 [INFO    ] websockets.server: server listening on 127.0.0.1:8765
+2026-04-19 13:17:49 [INFO    ] core.nt_client: WebSocket server listening on ws://127.0.0.1:8765
+2026-04-19 13:17:54 [INFO    ] websockets.server: connection open
+2026-04-19 13:17:54 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 53903)
+2026-04-19 13:18:23 [INFO    ] core.nt_client: Order submitted: Buy Market ES 03-25 x1 @ 0.00
+2026-04-19 13:18:23 [INFO    ] gui.orders: User submitted Buy Market ES 03-25 x1
+2026-04-19 13:18:38 [INFO    ] core.nt_client: Order submitted: Sell Market ES 03-25 x1 @ 0.00
+2026-04-19 13:18:38 [INFO    ] gui.orders: User submitted Sell Market ES 03-25 x1
+2026-04-19 13:31:48 [INFO    ] core.nt_client: NinjaTrader disconnected: ('127.0.0.1', 53903)
+2026-04-19 13:31:58 [INFO    ] __main__: Shutting down WebSocket server.
+2026-04-19 13:31:58 [INFO    ] __main__: NinjaAccountManager stopped.
+2026-04-19 13:31:58 [ERROR   ] asyncio: Task was destroyed but it is pending!
+task: <Task pending name='Task-4' coro=<IocpProactor.accept.<locals>.accept_coro() running at C:\Users\Owner\AppData\Local\Programs\Python\Python313\Lib\asyncio\windows_events.py:567> wait_for=<_OverlappedFuture cancelled>>
+2026-04-19 14:01:56 [INFO    ] __main__: NinjaAccountManager starting (host=127.0.0.1 port=8765)
+2026-04-19 14:01:56 [INFO    ] core.nt_client: NinjaTraderClient started; waiting for NT8 connections.
+2026-04-19 14:01:56 [INFO    ] websockets.server: server listening on 127.0.0.1:8765
+2026-04-19 14:01:56 [INFO    ] core.nt_client: WebSocket server listening on ws://127.0.0.1:8765
+2026-04-19 14:01:56 [INFO    ] websockets.server: connection open
+2026-04-19 14:01:56 [INFO    ] core.nt_client: NinjaTrader connected from ('127.0.0.1', 55684)
+2026-04-19 14:03:20 [INFO    ] core.nt_client: Order submitted: Buy Market NQ 06-26 x1 @ 0.00
+2026-04-19 14:03:20 [INFO    ] gui.orders: User submitted Buy Market NQ 06-26 x1
+2026-04-19 14:03:26 [INFO    ] core.nt_client: Order submitted: Sell Market NQ 06-26 x1 @ 0.00
+2026-04-19 14:03:26 [INFO    ] gui.orders: User submitted Sell Market NQ 06-26 x1
+2026-04-19 14:03:35 [INFO    ] core.nt_client: Order submitted: Buy Market NQ 06-26 x1 @ 0.00
+2026-04-19 14:03:35 [INFO    ] gui.orders: User submitted Buy Market NQ 06-26 x1
