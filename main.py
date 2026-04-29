@@ -14,9 +14,12 @@ import sys
 from pathlib import Path
 
 from core.config import AppConfig
+from core.data_models import StrategyEventRecord, StrategySnapshot
 from core.event_bus import EventBus, Events
 from core.state import AppState
+from core.strategy_api import StrategyAPIServer
 from core.nt_client import NinjaTraderClient
+from core.strategy_bridge import StrategyBridgeService
 from gui.app import NinjaApp
 
 
@@ -62,6 +65,7 @@ def main() -> None:
     state = AppState(
         max_log_lines=config.gui_log_max_lines,
         max_candles=config.chart_max_candles,
+        max_strategy_events=config.gui_strategy_event_max_lines,
     )
 
     # ── Wire event bus → AppState ─────────────────────────────────────────────
@@ -117,6 +121,38 @@ def main() -> None:
 
     event_bus.subscribe(Events.LOG_MESSAGE, state.add_log)
 
+    def on_strategy_event(data: dict) -> None:
+        if not isinstance(data, dict):
+            return
+        event_name = str(data.get("event") or "")
+        if event_name == "STATE_SNAPSHOT":
+            snapshot = StrategySnapshot.from_event(data)
+            state.update_strategy_snapshot(snapshot)
+            return
+
+        record = StrategyEventRecord.from_event(data)
+        state.add_strategy_event(record)
+        if event_name in {"ACCEPTED", "ENTRY_SUBMITTED", "FILLED", "STOP_WORKING", "TARGET_WORKING", "ERROR", "REJECTED", "HEARTBEAT_TIMEOUT"}:
+            state.add_log(
+                "[STRATEGY] "
+                f"{record.event} signal={record.signal_id or '-'} "
+                f"instrument={record.instrument or '-'} "
+                f"state={record.runtime_state or '-'} "
+                f"{record.summary or record.error_code or ''}".strip()
+            )
+
+    def on_strategy_client_status(data: dict) -> None:
+        if not isinstance(data, dict):
+            return
+        state.update_strategy_clients(
+            client_count=int(data.get("client_count") or 0),
+            listening=bool(data.get("listening", False)),
+            endpoint=str(data.get("endpoint") or ""),
+        )
+
+    event_bus.subscribe(Events.STRATEGY_EVENT, on_strategy_event)
+    event_bus.subscribe(Events.STRATEGY_CLIENT_STATUS, on_strategy_client_status)
+
     # Mirror Python logger → GUI log panel
     class GUILogHandler(logging.Handler):
         def emit(self, record: logging.LogRecord) -> None:
@@ -132,12 +168,36 @@ def main() -> None:
     nt_client.start()
     state.is_server_running = True
     state.add_log(f"[SERVER] Listening for NinjaTrader on ws://{config.host}:{config.port}")
+    strategy_bridge = StrategyBridgeService(config=config, event_bus=event_bus, nt_client=nt_client)
+    strategy_bridge.start()
+    state.add_log("[BRIDGE] Strategy runtime started")
+    if config.legacy_file_bridge_enabled:
+        state.add_log(f"[BRIDGE] Legacy file fallback watching {config.bridge_root}")
+
+    strategy_api = None
+    if config.strategy_api_enabled:
+        strategy_api = StrategyAPIServer(config=config, event_bus=event_bus, runtime=strategy_bridge)
+        strategy_api.start()
+        state.add_log(
+            f"[API] Strategy API listening on tcp://{config.strategy_api_host}:{config.strategy_api_port}"
+        )
 
     # ── Launch GUI (blocks until window is closed) ────────────────────────────
     try:
-        app = NinjaApp(config=config, state=state, nt_client=nt_client)
+        app = NinjaApp(
+            config=config,
+            state=state,
+            nt_client=nt_client,
+            strategy_runtime=strategy_bridge,
+        )
         app.run()
     finally:
+        if strategy_api is not None:
+            logger.info("Stopping strategy API.")
+            strategy_api.stop()
+        if strategy_bridge is not None:
+            logger.info("Stopping strategy bridge.")
+            strategy_bridge.stop()
         logger.info("Shutting down WebSocket server.")
         nt_client.stop()
         logger.info("NinjaAccountManager stopped.")

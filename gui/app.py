@@ -20,12 +20,14 @@ import dearpygui.dearpygui as dpg
 from core.config import AppConfig
 from core.nt_client import NinjaTraderClient
 from core.state import AppState
+from core.strategy_bridge import StrategyBridgeService
 from gui.dashboard import DashboardPanel
 from gui.accounts import AccountsPanel
 from gui.positions import PositionsPanel
 from gui.orders import OrdersPanel
 from gui.charts import ChartsPanel
 from gui.logs import LogsPanel
+from gui.strategy import StrategyPanel
 
 logger = logging.getLogger(__name__)
 
@@ -36,10 +38,12 @@ class NinjaApp:
         config: AppConfig,
         state: AppState,
         nt_client: NinjaTraderClient,
+        strategy_runtime: StrategyBridgeService,
     ) -> None:
         self._config = config
         self._state = state
         self._nt = nt_client
+        self._strategy_runtime = strategy_runtime
         self._panels: list = []
 
     # ── Public entry point ────────────────────────────────────────────────────
@@ -79,6 +83,7 @@ class NinjaApp:
             with dpg.tab_bar(tag="main_tabs"):
                 panels = [
                     DashboardPanel("main_tabs", self._state),
+                    StrategyPanel("main_tabs", self._state, self._strategy_runtime, self._config),
                     AccountsPanel("main_tabs", self._state),
                     PositionsPanel("main_tabs", self._state),
                     OrdersPanel("main_tabs", self._state, self._nt),

@@ -99,7 +99,74 @@ python main.py
 The app starts a WebSocket server on `ws://127.0.0.1:8765`.  
 NinjaTrader will connect automatically once the indicator is loaded on a chart.
 
----
+### 6 - Direct strategy API
+
+`NinjaAccountManager` now exposes a direct localhost strategy API for
+`ta_foundation` on:
+
+```text
+tcp://127.0.0.1:8766
+```
+
+Protocol:
+
+- one JSON command per line from client to server
+- one JSON event per line from server to client
+- server pushes `STATE_SNAPSHOT` immediately on connect and after material state changes
+
+Primary inbound commands:
+
+- `HEARTBEAT`
+- `ENTER_LONG`
+- `ENTER_SHORT`
+- `EXIT_ALL`
+- `SCRATCH`
+- `MOVE_STOP`
+- `CANCEL_WORKING`
+- `FLATTEN_AND_DISABLE`
+
+Primary outbound events:
+
+- `ACCEPTED`
+- `REJECTED`
+- `ENTRY_SUBMITTED`
+- `FILLED`
+- `PARTIAL_FILL`
+- `STOP_ATTACHED`
+- `TARGET_ATTACHED`
+- `STOP_WORKING`
+- `TARGET_WORKING`
+- `EXIT_FILLED`
+- `ERROR`
+- `HEARTBEAT_TIMEOUT`
+- `STATE_SNAPSHOT`
+
+### 7 - Legacy file bridge fallback
+
+The older ta_foundation file bridge is now a fallback only. If explicitly enabled,
+the runtime watches:
+
+```text
+bridge/
+├── inbox/
+├── archive/
+├── rejected/
+├── outbox/
+├── state/
+└── logs/
+```
+
+Set `legacy_file_bridge_enabled=True` if you still need temporary compatibility
+with `bridge/inbox/*.json`.
+
+The Python runtime will:
+
+- validate incoming strategy commands
+- route orders through the existing WebSocket bridge to NinjaTrader
+- publish direct execution events over the strategy socket
+- optionally mirror legacy outbox/state files when fallback mode is enabled
+
+--- 
 
 ## Configuration
 
@@ -114,6 +181,14 @@ Edit `core/config.py` to change defaults:
 | `ema_period` | `9` | EMA period for chart overlay |
 | `window_width` | `1440` | Initial window width |
 | `window_height` | `900` | Initial window height |
+| `strategy_api_host` | `127.0.0.1` | Localhost bind address for ta_foundation strategy commands |
+| `strategy_api_port` | `8766` | Direct JSON-lines strategy API port |
+| `legacy_file_bridge_enabled` | `False` | Re-enable the old file inbox/outbox adapter only as a fallback |
+| `bridge_root` | `bridge` | Legacy compatibility bridge root when file fallback is enabled |
+| `bridge_default_account` | `Sim101` | Account used for strategy-driven execution |
+| `bridge_tick_size` | `0.25` | Tick size used for stop/target price calculation |
+| `bridge_heartbeat_timeout_seconds` | `60` | Heartbeat timeout before the bridge faults intake |
+| `bridge_max_position_size` | `3` | Max allowed strategy-driven entry size |
 
 ---
 
@@ -162,6 +237,15 @@ Edit `core/config.py` to change defaults:
 
 {"action": "SUBSCRIBE_BARS", "instrument": "NQ 03-25",
  "barType": "Minute", "period": 5}
+```
+
+Strategy-driven order routing to NinjaTrader may also include:
+
+```json
+{"action": "SUBMIT_ORDER", "account": "Sim101", "instrument": "NQ 06-26",
+ "orderAction": "Buy", "orderType": "Market", "quantity": 1,
+ "price": 0.0, "stopPrice": 0.0,
+ "signalName": "TF_ENTER_<message_id>", "ocoId": "TF_OCO_<message_id>"}
 ```
 
 ---

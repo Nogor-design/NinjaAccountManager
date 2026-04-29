@@ -59,7 +59,7 @@ namespace NinjaTrader.NinjaScript.Indicators
         // ── Order / cancel request types (WebSocket thread → NT thread) ───────
         private class OrderReq
         {
-            public string Account, Instrument, Action, Type;
+            public string Account, Instrument, Action, Type, SignalName, OcoId;
             public int    Qty;
             public double Price, StopPrice;
         }
@@ -222,8 +222,8 @@ namespace NinjaTrader.NinjaScript.Indicators
                     req.Qty,
                     req.Price,
                     req.StopPrice,
-                    string.Empty,           // OCO id
-                    "NinjaAccountManager",  // signal name visible in Activity log
+                    string.IsNullOrWhiteSpace(req.OcoId) ? string.Empty : req.OcoId,
+                    string.IsNullOrWhiteSpace(req.SignalName) ? "NinjaAccountManager" : req.SignalName,
                     null);                  // ATM strategy (none)
 
                 if (order != null)
@@ -330,6 +330,7 @@ namespace NinjaTrader.NinjaScript.Indicators
                     account         = o.Account.Name,
                     instrument      = o.Instrument.FullName,
                     action          = o.OrderAction.ToString(),
+                    signal_name     = o.Name,
                     order_type      = o.OrderType.ToString(),
                     quantity        = o.Quantity,
                     filled_quantity = o.Filled,
@@ -359,6 +360,8 @@ namespace NinjaTrader.NinjaScript.Indicators
                         Instrument = cmd.ContainsKey("instrument")  ? cmd["instrument"]  as string : null,
                         Action     = cmd.ContainsKey("orderAction") ? cmd["orderAction"] as string : "Buy",
                         Type       = cmd.ContainsKey("orderType")   ? cmd["orderType"]   as string : "Market",
+                        SignalName = cmd.ContainsKey("signalName")  ? cmd["signalName"]  as string : null,
+                        OcoId      = cmd.ContainsKey("ocoId")       ? cmd["ocoId"]       as string : null,
                         Qty        = cmd.ContainsKey("quantity")    ? Convert.ToInt32(cmd["quantity"])   : 1,
                         Price      = cmd.ContainsKey("price")       ? Convert.ToDouble(cmd["price"])     : 0.0,
                         StopPrice  = cmd.ContainsKey("stopPrice")   ? Convert.ToDouble(cmd["stopPrice"]) : 0.0,
@@ -497,6 +500,7 @@ namespace NinjaTrader.NinjaScript.Indicators
                             account         = order.Account.Name,
                             instrument      = order.Instrument.FullName,
                             action          = order.OrderAction.ToString(),
+                            signal_name     = order.Name,
                             order_type      = order.OrderType.ToString(),
                             quantity        = order.Quantity,
                             filled_quantity = order.Filled,

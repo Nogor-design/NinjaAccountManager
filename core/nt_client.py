@@ -17,7 +17,8 @@ FROM NinjaTrader → Python (incoming):
 FROM Python → NinjaTrader (outgoing commands):
   {"action": "SUBMIT_ORDER",  "account": ..., "instrument": ...,
    "orderAction": "Buy"|"Sell", "orderType": "Market"|"Limit"|"Stop"|"StopLimit",
-   "quantity": N, "price": 0.0, "stopPrice": 0.0}
+   "quantity": N, "price": 0.0, "stopPrice": 0.0,
+   "signalName": "...", "ocoId": "..."}
   {"action": "CANCEL_ORDER",  "orderId": "..."}
   {"action": "SUBSCRIBE_MD",  "instrument": "ES 03-25"}
   {"action": "SUBSCRIBE_BARS","instrument": "ES 03-25", "barType": "Minute", "period": 1}
@@ -184,21 +185,33 @@ class NinjaTraderClient:
         quantity: int,
         price: float = 0.0,
         stop_price: float = 0.0,
+        signal_name: str = "",
+        oco_id: str = "",
     ) -> None:
+        nt_order_type = self._normalize_order_type(order_type)
         self._send_all(
             {
                 "action": "SUBMIT_ORDER",
                 "account": account,
                 "instrument": instrument,
                 "orderAction": action,
-                "orderType": order_type,
+                "orderType": nt_order_type,
                 "quantity": quantity,
                 "price": price,
                 "stopPrice": stop_price,
+                "signalName": signal_name,
+                "ocoId": oco_id,
             }
         )
         logger.info(
-            "Order submitted: %s %s %s x%d @ %.2f", action, order_type, instrument, quantity, price
+            "Order submitted: %s %s %s x%d @ %.2f stop=%.2f signal=%s",
+            action,
+            nt_order_type,
+            instrument,
+            quantity,
+            price,
+            stop_price,
+            signal_name or "<none>",
         )
 
     def cancel_order(self, order_id: str) -> None:
@@ -229,3 +242,11 @@ class NinjaTraderClient:
     @property
     def connection_count(self) -> int:
         return len(self._connections)
+
+    @staticmethod
+    def _normalize_order_type(order_type: str) -> str:
+        value = str(order_type or "").strip()
+        mapping = {
+            "Stop": "StopMarket",
+        }
+        return mapping.get(value, value or "Market")
