@@ -1,0 +1,48 @@
+# Line endings ---------------------------------------------------------------
+#
+# Git's system config on this machine sets core.autocrlf=true, which rewrites
+# text files to CRLF on checkout while the committed blobs stay LF. Anything
+# that hashes the WORKING TREE -- provenance stamps, frozen-evidence pins,
+# parity manifests, engine identities -- then records a digest that depends on
+# which machine or git config did the checkout, not on the content.
+#
+# This has bitten the trading stack repeatedly: strategy-analysis on
+# 2026-09-09 (a checkout rewrote six frozen files LF->CRLF; git showed them
+# clean while every pin failed), and trading-capability-hub on 2026-09-20
+# (manifest drift across a branch merge, and engine identities that changed
+# with no code change). See the hub's
+# docs/audits/NT_ANALYZER_RUN_REFUSAL_ROOT_CAUSE_2026-09-20.md and commit
+# "Make engine identity independent of line endings".
+#
+# Pin the working tree to LF everywhere. Any path rule FURTHER DOWN this file
+# overrides this default -- keep byte-exact rules (-text) below it, never above.
+* text=auto eol=lf
+
+# Windows formats that genuinely require CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sln text eol=crlf
+
+# Binary payloads must never be line-ending converted. text=auto already
+# detects most of these; listing them makes the intent explicit.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.7z binary
+*.gz binary
+*.parquet binary
+*.feather binary
+*.pkl binary
+*.npy binary
+*.npz binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
+*.dll binary
+*.exe binary
+*.pyd binary
+*.so binary
